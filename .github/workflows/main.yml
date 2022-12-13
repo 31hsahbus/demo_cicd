@@ -1,0 +1,36 @@
+name: Demo-cicd-self-hosted
+
+on:
+ push:
+   branches:
+     - cicd
+ workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+ deploy_dev:
+    runs-on: 
+      - self-hosted
+      - cicd
+      
+      
+    steps:
+      - name: Checkout
+        if: github.ref == 'refs/heads/cicd'
+        uses: actions/checkout@v2
+
+
+      - uses: benjlevesque/short-sha@v1.2
+        if: github.ref == 'refs/heads/cicd'
+        id: short-sha
+        with:
+          length: 6
+      - run: echo $SHA
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+      - run: echo $SHA
+        env:
+          SHA: ${{ env.SHA }}
+
+     
