@@ -1,0 +1,46 @@
+name: Demo cicd
+
+on:
+ push:
+   branches:
+     - cicd_ssp
+ workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+ deploy_dev:
+    runs-on: 
+      - self-hosted
+      - cicd
+      - ssp-backend
+      
+    steps:
+      - name: Checkout
+        if: github.ref == 'refs/heads/cicd_ssp'
+        uses: actions/checkout@v2
+
+
+      - uses: benjlevesque/short-sha@v1.2
+        if: github.ref == 'refs/heads/cicd_ssp'
+        id: short-sha
+        with:
+          length: 6
+      - run: echo $SHA
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+      - run: echo $SHA
+        env:
+          SHA: ${{ env.SHA }}
+
+      - name: Build docker image.
+        if: github.ref == 'refs/heads/cicd_ssp'
+        env:
+          DEV_PASSWD: ${{ secrets.DEV_PASSWD }}
+          DEV_UNAME: ${{ secrets.DEV_UNAME }}
+          IMAGE_TAG: ${{ env.SHA }}
+        run: |
+          #docker login ojtkgsbharb01.mtn.com.ng  -u $DEV_UNAME -p $DEV_PASSWD
+          #docker build -t ssp-backend-dev .
+          docker tag ssp-backend-dev ojtkgsbharb01.mtn.com.ng/ssp-backend-dev/ssp-backend-dev:$IMAGE_TAG
+          docker push ojtkgsbharb01.mtn.com.ng/ssp-backend-dev/ssp-backend-dev:$IMAGE_TAG
