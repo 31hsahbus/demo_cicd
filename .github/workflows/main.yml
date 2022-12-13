@@ -3,7 +3,7 @@ name: Demo cicd
 on:
  push:
    branches:
-     - cicd_ssp
+     - cicd
  workflow_dispatch:
   push:
     branches:
@@ -13,16 +13,16 @@ jobs:
     runs-on: 
       - self-hosted
       - cicd
-      - ssp-backend
+      
       
     steps:
       - name: Checkout
-        if: github.ref == 'refs/heads/cicd_ssp'
+        if: github.ref == 'refs/heads/cicd'
         uses: actions/checkout@v2
 
 
       - uses: benjlevesque/short-sha@v1.2
-        if: github.ref == 'refs/heads/cicd_ssp'
+        if: github.ref == 'refs/heads/cicd'
         id: short-sha
         with:
           length: 6
@@ -34,7 +34,7 @@ jobs:
           SHA: ${{ env.SHA }}
 
       - name: Build docker image.
-        if: github.ref == 'refs/heads/cicd_ssp'
+        if: github.ref == 'refs/heads/cicd'
         env:
           DEV_PASSWD: ${{ secrets.DEV_PASSWD }}
           DEV_UNAME: ${{ secrets.DEV_UNAME }}
