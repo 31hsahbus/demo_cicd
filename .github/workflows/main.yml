@@ -1,4 +1,4 @@
-name: Demo-cicd-self-hosted
+name: cicd-self-hosted-demo
 
 on:
  push:
