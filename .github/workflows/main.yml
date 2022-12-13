@@ -1,4 +1,4 @@
-name: Demo cicd
+name: Demo-cicd
 
 on:
  push:
