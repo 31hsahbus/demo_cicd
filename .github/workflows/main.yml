@@ -31,7 +31,7 @@ jobs:
           SHA: ${{ steps.short-sha.outputs.sha }}
       - run: echo $SHA
         env:
-      - run: ls -la
           SHA: ${{ env.SHA }}
+      - run: ls -la
 
      
